@@ -1,9 +1,9 @@
 from pathlib import Path
-import copy
 
 from transformers import AutoTokenizer, AutoModelForCausalLM, PreTrainedTokenizerBase, PreTrainedModel
 
 from ._generation import Generation
+from .generation_settings import GenerationSettings
 
 
 class Model:
@@ -52,9 +52,9 @@ class Model:
         )
         return cls(model, tokenizer)
 
-    def create_generation(self, chat_history: list[dict]) -> Generation:
+    def create_generation(self, settings: GenerationSettings) -> Generation:
         return Generation(
             model=self.model,
             tokenizer=self.tokenizer,
-            messages=copy.deepcopy(chat_history)
+            settings=settings
         )
