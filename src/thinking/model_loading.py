@@ -1,13 +1,19 @@
 from pathlib import Path
+import copy
 
-from huggingface_hub import snapshot_download
 from transformers import AutoTokenizer, AutoModelForCausalLM, PreTrainedTokenizerBase, PreTrainedModel
+
+from ._generation import Generation
 
 
 class Model:
     """
     An object that encapsulates all the components required for using the model.
     """
+
+    def __init__(self, model: PreTrainedModel, tokenizer: PreTrainedTokenizerBase):
+        self.model = model
+        self.tokenizer = tokenizer
 
     @classmethod
     def load(
@@ -46,6 +52,9 @@ class Model:
         )
         return cls(model, tokenizer)
 
-    def __init__(self, model: PreTrainedModel, tokenizer: PreTrainedTokenizerBase):
-        self.model = model
-        self.tokenizer = tokenizer
+    def create_generation(self, chat_history: list[dict]) -> Generation:
+        return Generation(
+            model=self.model,
+            tokenizer=self.tokenizer,
+            messages=copy.deepcopy(chat_history)
+        )
