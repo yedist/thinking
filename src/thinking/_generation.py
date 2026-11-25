@@ -5,6 +5,14 @@ from .generation_settings import GenerationSettings
 
 
 class Generation:
+    """
+    An object representing a model's output unit.
+    It integrates the model object and the generation settings object
+    into the generation function.
+    Conceptually, it serves as the connecting point between
+    "high-level" objects and the "low-level" layer, which consists of more fundamental libraries.
+    """
+
     def __init__(self, model: PreTrainedModel, tokenizer: PreTrainedTokenizerBase, settings: GenerationSettings):
         self._model = model
         self._tokenizer = tokenizer

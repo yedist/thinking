@@ -53,6 +53,18 @@ class Model:
         return cls(model, tokenizer)
 
     def create_generation(self, settings: GenerationSettings) -> Generation:
+        """
+        Creates an object for generating the output, using the model.
+        The architecture separates the model object—intended to serve as a (logically) immutable foundation,
+        for output generation—from the output management object specific to each request,
+        which may vary from one request to another.
+
+        Args:
+            settings: Settings for creating output.
+
+        Returns:
+            Generation: Object to create the output
+        """
         return Generation(
             model=self.model,
             tokenizer=self.tokenizer,
