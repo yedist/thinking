@@ -26,7 +26,9 @@ class Generation:
             self._settings.messages_history,
             tokenize=True,
             add_generation_prompt=True,
-            return_tensors="pt"
+            return_tensors="pt",
+            return_dict=False,
+            enable_thining=False,
         ).to(self._model.device)
 
         with torch.inference_mode():
