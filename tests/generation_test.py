@@ -5,6 +5,7 @@ import thinking as think
 
 def test(model):
     """
+    Checks whether a model succeeds in generating output without an error.
     """
     settings = think.GenerationSettings()
     settings.messages_history = [{"role": "user", "content": "hello!"}]  # chat history for example
