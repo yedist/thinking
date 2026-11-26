@@ -1,13 +1,19 @@
 from pathlib import Path
 
-from huggingface_hub import snapshot_download
 from transformers import AutoTokenizer, AutoModelForCausalLM, PreTrainedTokenizerBase, PreTrainedModel
+
+from ._generation import Generation
+from .generation_settings import GenerationSettings
 
 
 class Model:
     """
     An object that encapsulates all the components required for using the model.
     """
+
+    def __init__(self, model: PreTrainedModel, tokenizer: PreTrainedTokenizerBase):
+        self.model = model
+        self.tokenizer = tokenizer
 
     @classmethod
     def load(
@@ -46,6 +52,21 @@ class Model:
         )
         return cls(model, tokenizer)
 
-    def __init__(self, model: PreTrainedModel, tokenizer: PreTrainedTokenizerBase):
-        self.model = model
-        self.tokenizer = tokenizer
+    def create_generation(self, settings: GenerationSettings) -> Generation:
+        """
+        Creates an object for generating the output, using the model.
+        The architecture separates the model object—intended to serve as a (logically) immutable foundation,
+        for output generation—from the output management object specific to each request,
+        which may vary from one request to another.
+
+        Args:
+            settings: Settings for creating output.
+
+        Returns:
+            Generation: Object to create the output
+        """
+        return Generation(
+            model=self.model,
+            tokenizer=self.tokenizer,
+            settings=settings
+        )
