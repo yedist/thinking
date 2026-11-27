@@ -6,11 +6,7 @@ from collections.abc import Callable, Iterator
 from typing import Any
 
 
-class Operator(ABC):
-    @abstractmethod
-    def __init__(self, task: Callable[[], None]):
-        ...
-
+class RunningUnit(ABC):
     @abstractmethod
     def run(self):
         ...
@@ -25,6 +21,12 @@ class Operator(ABC):
 
     @abstractmethod
     def receive_from_worker(self, no_wait: bool = False) -> Iterator[Any]:
+        ...
+
+
+class Operator(ABC):
+    @abstractmethod
+    def create_running_unit(self, task: Callable[[], None]) -> RunningUnit:
         ...
 
 

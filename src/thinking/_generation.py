@@ -19,13 +19,13 @@ class Generation:
             model: PreTrainedModel,
             tokenizer: PreTrainedTokenizerBase,
             settings: GenerationSettings,
-            operator: type[Operator],
+            operator: Operator,
     ):
         self._model = model
         self._tokenizer = tokenizer
         self._settings = settings
         self._output = None
-        self._operator = operator(task=self._generation)
+        self._operator = operator.create_running_unit(self._generation)
 
     @property
     def output(self):

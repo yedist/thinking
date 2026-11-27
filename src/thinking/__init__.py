@@ -1,6 +1,6 @@
 from .model_loading import Model
 from .generation_settings import GenerationSettings
-from .operator import Operator, ThreadOperator, SyncOperator
+from .operator import Operator, RunningUnit
 
 
-__all__ = ["Model", "GenerationSettings", "Operator", "SyncOperator", "ThreadOperator"]
+__all__ = ["Model", "GenerationSettings", "Operator", "RunningUnit"]

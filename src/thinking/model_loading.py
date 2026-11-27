@@ -53,7 +53,7 @@ class Model:
         )
         return cls(model, tokenizer)
 
-    def create_generation(self, settings: GenerationSettings, operator: type[Operator]) -> Generation:
+    def create_generation(self, settings: GenerationSettings, operator: Operator) -> Generation:
         """
         Creates an object for generating the output, using the model.
         The architecture separates the model object—intended to serve as a (logically) immutable foundation,
@@ -62,7 +62,7 @@ class Model:
 
         Args:
             settings: Settings for creating output.
-            operator: An object type that will run the generation in parallel with the main code.
+            operator: An object that will run the generation in parallel with the main code.
 
         Returns:
             Generation: Object to create the output
