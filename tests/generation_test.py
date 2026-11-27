@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import thinking as think
+from thinking.operators import SyncOperator
 
 
 def test(model):
@@ -10,7 +11,7 @@ def test(model):
     settings = think.GenerationSettings()
     settings.messages_history = [{"role": "user", "content": "hello!"}]  # chat history for example
 
-    generation = model.create_generation(settings, think.SyncOperator)
+    generation = model.create_generation(settings, SyncOperator())
     generation.run()  # not parallel
 
     assert type(generation.output) == str

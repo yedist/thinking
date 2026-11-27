@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import thinking as think
+from thinking.operators import ThreadOperator
 
 
 def test(model):
@@ -10,7 +11,7 @@ def test(model):
     settings = think.GenerationSettings()
     settings.messages_history = [{"role": "user", "content": "hello!"}]  # chat history for example
 
-    generation = model.create_generation(settings, think.ThreadOperator)
+    generation = model.create_generation(settings, ThreadOperator())
     generation.run()  # start a thread
 
     assert type(generation.output) == str  # '.output' needs to wait for the end
