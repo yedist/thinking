@@ -31,7 +31,7 @@ class Generation:
     def output(self):
         if not self._output:
             self._operator.wait_to_stop()
-            self._output = self._operator.receive_from_worker(no_wait=True)
+            self._output = next(self._operator.receive_from_worker(no_wait=True))
 
         return self._output
 
