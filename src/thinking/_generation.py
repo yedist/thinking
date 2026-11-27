@@ -2,6 +2,7 @@ import torch
 from transformers import PreTrainedTokenizerBase, PreTrainedModel
 
 from .generation_settings import GenerationSettings
+from .operator import Operator
 
 
 class Generation:
@@ -13,12 +14,32 @@ class Generation:
     "high-level" objects and the "low-level" layer, which consists of more fundamental libraries.
     """
 
-    def __init__(self, model: PreTrainedModel, tokenizer: PreTrainedTokenizerBase, settings: GenerationSettings):
+    def __init__(
+            self,
+            model: PreTrainedModel,
+            tokenizer: PreTrainedTokenizerBase,
+            settings: GenerationSettings,
+            operator: type[Operator],
+    ):
         self._model = model
         self._tokenizer = tokenizer
         self._settings = settings
+        self._output = None
+        self._operator = operator(task=self._generation)
 
-    def run(self) -> str:
+    @property
+    def output(self):
+        if not self._output:
+            self._operator.wait_to_stop()
+            self._output = self._operator.receive_from_worker(no_wait=True)
+
+        return self._output
+
+
+    def run(self):
+        self._operator.run()
+
+    def _generation(self) -> str:
         """
         black box
         """
@@ -39,7 +60,9 @@ class Generation:
 
         generated_tokens = outputs[0, inputs.shape[-1]:]
 
-        return self._tokenizer.decode(  # default args
+        result = self._tokenizer.decode(  # default args
             generated_tokens,
             skip_special_tokens=True
         )
+
+        self._operator.send_from_worker(result)

@@ -2,8 +2,9 @@ from pathlib import Path
 
 from transformers import AutoTokenizer, AutoModelForCausalLM, PreTrainedTokenizerBase, PreTrainedModel
 
-from ._generation import Generation
 from .generation_settings import GenerationSettings
+from ._generation import Generation
+from .operator import Operator
 
 
 class Model:
@@ -52,7 +53,7 @@ class Model:
         )
         return cls(model, tokenizer)
 
-    def create_generation(self, settings: GenerationSettings) -> Generation:
+    def create_generation(self, settings: GenerationSettings, operator: type[Operator]) -> Generation:
         """
         Creates an object for generating the output, using the model.
         The architecture separates the model object—intended to serve as a (logically) immutable foundation,
@@ -61,6 +62,7 @@ class Model:
 
         Args:
             settings: Settings for creating output.
+            operator: An object type that will run the generation in parallel with the main code.
 
         Returns:
             Generation: Object to create the output
@@ -68,5 +70,6 @@ class Model:
         return Generation(
             model=self.model,
             tokenizer=self.tokenizer,
-            settings=settings
+            settings=settings,
+            operator=operator,
         )
