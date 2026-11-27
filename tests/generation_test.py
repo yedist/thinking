@@ -9,7 +9,11 @@ def test(model):
     """
     settings = think.GenerationSettings()
     settings.messages_history = [{"role": "user", "content": "hello!"}]  # chat history for example
-    assert type(model.create_generation(settings).run()) == str
+
+    generation = model.create_generation(settings, think.ThreadOperator)
+    generation.run()  # start a thread
+
+    assert type(generation.output) == str  # '.output' needs to wait for the end
 
 
 if __name__ == '__main__':
