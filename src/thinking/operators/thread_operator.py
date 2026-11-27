@@ -3,10 +3,8 @@ from queue import Queue, Empty
 from threading import Thread
 from typing import Any
 
-from .operator_abc import Operator, RunningUnit
 
-
-class ThreadTask(RunningUnit):
+class ThreadTask:
     def __init__(self, task: Callable[[Callable[[Any], None]], None]):
         self._thread = Thread(target=task, args=(self.send_from_worker,))
         self._pipe = Queue()
@@ -30,6 +28,7 @@ class ThreadTask(RunningUnit):
                 return
 
 
-class ThreadOperator(Operator):
-    def create_running_unit(self, task: Callable[[Callable[[Any], None]], None]) -> ThreadTask:
+class ThreadOperator:
+    @staticmethod
+    def create_running_unit(task: Callable[[Callable[[Any], None]], None]) -> ThreadTask:
         return ThreadTask(task)

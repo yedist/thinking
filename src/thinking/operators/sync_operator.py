@@ -2,10 +2,8 @@ from collections.abc import Callable, Iterator
 from queue import Queue, Empty
 from typing import Any
 
-from .operator_abc import Operator, RunningUnit
 
-
-class SyncTask(RunningUnit):
+class SyncTask:
     def __init__(self, task: Callable[[Callable[[Any], None]], None]):
         self._func = task
         self._pipe = Queue()
@@ -29,6 +27,7 @@ class SyncTask(RunningUnit):
                 return
 
 
-class SyncOperator(Operator):
-    def create_running_unit(self, task: Callable[[Callable[[Any], None]], None]) -> SyncTask:
+class SyncOperator:
+    @staticmethod
+    def create_running_unit(task: Callable[[Callable[[Any], None]], None]) -> SyncTask:
         return SyncTask(task)

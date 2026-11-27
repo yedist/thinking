@@ -42,7 +42,7 @@ class Generation:
     def run(self):
         self._operator.run()
 
-    def _generation(self, send_method: Callable[[Any], None]) -> str:
+    def _generation(self, send_method: Callable[[Any], None]):
         """
         black box
         """

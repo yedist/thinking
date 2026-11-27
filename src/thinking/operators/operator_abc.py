@@ -1,27 +1,22 @@
-from abc import ABC, abstractmethod
 from collections.abc import Callable, Iterator
-from typing import Any
+from typing import Any, Protocol
 
 
-class RunningUnit(ABC):
-    @abstractmethod
-    def run(self):
+class RunningUnit(Protocol):
+
+    def run(self) -> None:
         ...
 
-    @abstractmethod
-    def wait_to_stop(self):
+    def wait_to_stop(self) -> None:
         ...
 
-    @abstractmethod
-    def send_from_worker(self, value: Any):
+    def send_from_worker(self, value: Any) -> None:
         ...
 
-    @abstractmethod
     def receive_from_worker(self, no_wait: bool = False) -> Iterator[Any]:
         ...
 
 
-class Operator(ABC):
-    @abstractmethod
+class Operator(Protocol):
     def create_running_unit(self, task: Callable[[Callable[[Any], None]], None]) -> RunningUnit:
         ...
