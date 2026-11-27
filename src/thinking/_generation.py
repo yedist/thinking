@@ -2,7 +2,7 @@ import torch
 from transformers import PreTrainedTokenizerBase, PreTrainedModel
 
 from .generation_settings import GenerationSettings
-from .operator import Operator
+from .operators.operator_abc import Operator
 
 
 class Generation:

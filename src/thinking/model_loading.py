@@ -4,7 +4,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, PreTrainedTokenize
 
 from .generation_settings import GenerationSettings
 from ._generation import Generation
-from .operator import Operator
+from .operators.operator_abc import Operator
 
 
 class Model:
