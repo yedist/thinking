@@ -23,5 +23,5 @@ class RunningUnit(ABC):
 
 class Operator(ABC):
     @abstractmethod
-    def create_running_unit(self, task: Callable[[], None]) -> RunningUnit:
+    def create_running_unit(self, task: Callable[[Callable[[Any], None]], None]) -> RunningUnit:
         ...

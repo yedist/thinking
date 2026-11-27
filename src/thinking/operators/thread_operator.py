@@ -7,8 +7,8 @@ from .operator_abc import Operator, RunningUnit
 
 
 class ThreadTask(RunningUnit):
-    def __init__(self, task: Callable[[], None]):
-        self._thread = Thread(target=task)
+    def __init__(self, task: Callable[[Callable[[Any], None]], None]):
+        self._thread = Thread(target=task, args=(self.send_from_worker,))
         self._pipe = Queue()
 
     def run(self):
@@ -31,5 +31,5 @@ class ThreadTask(RunningUnit):
 
 
 class ThreadOperator(Operator):
-    def create_running_unit(self, task: Callable[[], None]) -> ThreadTask:
+    def create_running_unit(self, task: Callable[[Callable[[Any], None]], None]) -> ThreadTask:
         return ThreadTask(task)

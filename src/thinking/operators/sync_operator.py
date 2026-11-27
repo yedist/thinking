@@ -6,12 +6,12 @@ from .operator_abc import Operator, RunningUnit
 
 
 class SyncTask(RunningUnit):
-    def __init__(self, task: Callable[[], None]):
+    def __init__(self, task: Callable[[Callable[[Any], None]], None]):
         self._func = task
         self._pipe = Queue()
 
     def run(self):
-        self._func()
+        self._func(self.send_from_worker)
 
     def wait_to_stop(self):
         pass
@@ -30,5 +30,5 @@ class SyncTask(RunningUnit):
 
 
 class SyncOperator(Operator):
-    def create_running_unit(self, task: Callable[[], None]) -> SyncTask:
+    def create_running_unit(self, task: Callable[[Callable[[Any], None]], None]) -> SyncTask:
         return SyncTask(task)

@@ -1,3 +1,6 @@
+from collections.abc import Callable
+from typing import Any
+
 import torch
 from transformers import PreTrainedTokenizerBase, PreTrainedModel
 
@@ -39,7 +42,7 @@ class Generation:
     def run(self):
         self._operator.run()
 
-    def _generation(self) -> str:
+    def _generation(self, send_method: Callable[[Any], None]) -> str:
         """
         black box
         """
@@ -65,4 +68,4 @@ class Generation:
             skip_special_tokens=True
         )
 
-        self._operator.send_from_worker(result)
+        send_method(result)
